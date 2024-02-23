@@ -18,10 +18,11 @@ func InitTask() {
 	initFund := func() {
 		println("start")
 		list.GetData()
+		earnings.GetData()
 		data.GetData()
 	}
 	initFund()
-
+	println("start task")
 	//触发定时
 	c := cron.New()
 	//阶段收益 1点
