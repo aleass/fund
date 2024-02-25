@@ -26,19 +26,19 @@ func InitTask() {
 	//触发定时
 	c := cron.New()
 	//阶段收益 1点
-	_, err := c.AddFunc("0 11 * * 2-6", earnings.GetData)
+	_, err := c.AddFunc("0 23 * * 2-6", earnings.GetData)
 	if err != nil {
 		panic("cron err :" + err.Error())
 	}
 
 	//净值
-	_, err = c.AddFunc("15 11 * * 2-6", data.GetData)
+	_, err = c.AddFunc("15 23 * * 2-6", data.GetData)
 	if err != nil {
 		panic("cron err :" + err.Error())
 	}
 
 	//已买基金
-	_, err = c.AddFunc("30 11 * * 2-6", purchase.GetData)
+	_, err = c.AddFunc("30 23 * * 2-6", purchase.GetData)
 	if err != nil {
 		panic("cron err :" + err.Error())
 	}
@@ -68,13 +68,13 @@ func InitTask() {
 	//}
 
 	//基金评级任务 每个月
-	_, err = c.AddFunc("0 0 * */1 *", star.GetData)
+	_, err = c.AddFunc("0 4 * */1 *", star.GetData)
 	if err != nil {
 		panic("cron err :" + err.Error())
 	}
 
 	//基金列表 每个月
-	_, err = c.AddFunc("0 0 * */1 *", list.GetData)
+	_, err = c.AddFunc("0 3 * */1 *", list.GetData)
 	if err != nil {
 		panic("cron err :" + err.Error())
 	}

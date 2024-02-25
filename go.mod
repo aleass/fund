@@ -1,4 +1,4 @@
-module weather
+module fund
 
 go 1.19
 

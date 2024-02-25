@@ -1,8 +1,8 @@
 package main
 
 import (
-	"weather/common"
-	"weather/service"
+	"fund/common"
+	"fund/service"
 )
 
 func main() {
