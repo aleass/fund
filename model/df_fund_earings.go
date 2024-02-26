@@ -16,6 +16,7 @@ type DfFundEarnings struct {
 	Past2Years      string     `gorm:"column:past_2_years"      desc:"近2年增长率"`
 	Past3Months     string     `gorm:"column:past_3_months"     desc:"近3个月增长率"`
 	Past3Years      string     `gorm:"column:past_3_years"      desc:"近3年增长率"`
+	Past5Years      string     `gorm:"column:past_5_years"      desc:"近5年增长率"`
 	Past6Months     string     `gorm:"column:past_6_months"     desc:"近6个月增长率"`
 	SinceInception  string     `gorm:"column:since_inception"   desc:"成立来增长率"`
 	ThisYear        string     `gorm:"column:this_year"         desc:"今年来增长率"`

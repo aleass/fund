@@ -21,6 +21,7 @@ func main() {
 1.阶段收益
 2.净值
 3.已买基金
+4.已买基金阶段收益
 q.退出
 `)
 			command, _ = reader.ReadString('\n')
@@ -32,18 +33,26 @@ q.退出
 			//任务启动
 			switch command {
 			case "1": //阶段收益
-				println("执行:阶段收益")
+				println("执行:1.阶段收益")
 				service.Earnings.GetData()
+
+				println("执行完成:阶段收益")
 			case "2": //净值
-				println("执行:净值")
+				println("执行:2.净值")
 				service.Data.GetData()
+				println("执行完成:净值")
 			case "3": //已买基金
-				println("执行:已买基金")
+				println("执行:3.已买基金")
 				service.Purchase.GetData()
+				println("执行完成:已买基金")
+			case "4": //已买基金阶段收益
+				println("执行:4.已买基金阶段收益")
+				service.Earnings.GetPurData()
+				println("执行完成:已买基金阶段收益")
 			case "q":
 				return
 			}
-			return
+			println("\r\r")
 		}
 	}
 

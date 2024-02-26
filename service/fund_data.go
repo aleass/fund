@@ -51,7 +51,13 @@ func (f *FundData) GetData() {
 func (f *FundData) extract(raw []byte) {
 	var bufferEarnings []model.DfFundEarnings
 	var updateEarnings []model.DfFundEarnings
-	common.FuncDb.Model(&model.DfFundEarnings{}).Find(&bufferEarnings)
+	var err = common.FuncDb.Model(&model.DfFundEarnings{}).Select("id,code").Find(&bufferEarnings).Error
+	if err != nil {
+		log.Println(err.Error())
+		common.Logger.Error(err.Error())
+		return
+	}
+
 	var earningsMap = make(map[string]int64, len(bufferEarnings))
 	for _, v := range bufferEarnings {
 		earningsMap[v.Code] = v.Id
@@ -64,10 +70,16 @@ func (f *FundData) extract(raw []byte) {
 	now := time.Now()
 
 	var df []model.DfFundList
-	common.FuncDb.Model(&model.DfFundList{}).Select("id,code").Where("Inc_date is null").Find(&df)
-	var codeMap = make(map[string]int64, len(df))
+	err = common.FuncDb.Model(&model.DfFundList{}).Select("name,code").Where("deleted_at is null").Find(&df).Error
+	if err != nil {
+		log.Println(err.Error())
+		common.Logger.Error(err.Error())
+		return
+	}
+
+	var codeMap = make(map[string]string, len(df))
 	for _, fund := range df {
-		codeMap[fund.Code] = fund.Id
+		codeMap[fund.Code] = fund.Name
 	}
 
 	updateBuff := strings.Builder{}
@@ -76,32 +88,32 @@ func (f *FundData) extract(raw []byte) {
 			continue
 		}
 		var earnings = model.DfFundEarnings{
-			Code:            val[0],
-			LastUpdateTime:  now.Unix(),
-			UpdatedAt:       &now,
-			NavPerUnit:      common.Int642Float64(val[3]),
-			DailyGrowthRate: "0",
-			CumulativeNav:   "0",
-			Past1Month:      "0",
-			Past1Week:       "0",
-			Past1Year:       "0",
-			Past2Years:      "0",
-			Past3Months:     "0",
-			Past3Years:      "0",
-			Past6Months:     "0",
-			SinceInception:  "0",
-			ThisYear:        "0",
-
-			Date: now.Format("2006-01-02"),
+			Name:           codeMap[val[0]],
+			LastUpdateTime: now.Unix(),
+			UpdatedAt:      &now,
+			NavPerUnit:     common.Int642Float64(val[3]),
+			Date:           now.Format("2006-01-02"),
 		}
 
 		if id, ok := earningsMap[earnings.Code]; ok {
 			earnings.Id = id
+			earnings.Code = val[0]
 			updateEarnings = append(updateEarnings, earnings)
 			continue
 		}
 		earnings.AddTime = now.Unix()
 		earnings.CreatedAt = &now
+		earnings.DailyGrowthRate = "0"
+		earnings.CumulativeNav = "0"
+		earnings.Past1Month = "0"
+		earnings.Past1Week = "0"
+		earnings.Past1Year = "0"
+		earnings.Past2Years = "0"
+		earnings.Past3Months = "0"
+		earnings.Past3Years = "0"
+		earnings.Past6Months = "0"
+		earnings.SinceInception = "0"
+		earnings.ThisYear = "0"
 		bufferEarnings = append(bufferEarnings, earnings)
 
 	}
@@ -110,6 +122,7 @@ func (f *FundData) extract(raw []byte) {
 		if err != nil {
 			log.Println(err.Error())
 			common.Logger.Error(err.Error())
+			return
 		}
 	}
 	if len(updateEarnings) > 0 {

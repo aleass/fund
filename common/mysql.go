@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"log"
+	"os"
 	"time"
 )
 
@@ -26,12 +27,21 @@ func InitMysql() {
 		config.DbName,
 		"utf8mb4",
 	)
-	var err error
-	var _log = slowLog{}
-	level := logger.Info
+	var (
+		err   error
+		_log  = slowLog{}
+		level = logger.Warn
+		w     = log.New(_log, "\r\n", log.LstdFlags)
+	)
+
+	//是否命令形式
+	if len(os.Args) > 1 && os.Args[1] == "help" {
+		level = logger.Info
+		w = log.New(os.Stdout, "\r\n", log.LstdFlags)
+	}
+
 	newLogger := logger.New(
-		log.New(_log, "\r\n", log.LstdFlags),
-		//log.New(os.Stdout, "\r\n", log.LstdFlags),
+		w,
 		logger.Config{
 			SlowThreshold:             time.Millisecond * 300, // 慢 SQL 阈值
 			LogLevel:                  level,                  // 日志级别

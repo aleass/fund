@@ -11,8 +11,9 @@ const (
 // fund
 const (
 	//阶段收益
-	EarningsUrl = "http://fund.eastmoney.com/data/rankhandler.aspx?op=ph&dt=kf&ft=zq&rs=&gs=0&sc=1nzf&st=desc&tabSubtype=,,,,,&pi=1&pn=30000&dx=1&v=0.6135069950706549"
-	DataUrl     = "https://fund.eastmoney.com/Data/Fund_JJJZ_Data.aspx?t=1&lx=13&letter=&gsid=&text=&sort=zdf,desc&page=1,20000&feature=|&dt=1708520554503&atfc=&onlySale=0"
+	CodeEarningsUrl = "https://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jdzf&code=%s&rt=0.3905086437029832"
+	EarningsUrl     = "http://fund.eastmoney.com/data/rankhandler.aspx?op=ph&dt=kf&ft=zq&rs=&gs=0&sc=1nzf&st=desc&tabSubtype=,,,,,&pi=1&pn=30000&dx=1&v=0.6135069950706549"
+	DataUrl         = "https://fund.eastmoney.com/Data/Fund_JJJZ_Data.aspx?t=1&lx=13&letter=&gsid=&text=&sort=zdf,desc&page=1,20000&feature=|&dt=1708520554503&atfc=&onlySale=0"
 
 	//排名和日收益
 	TotalEarningsUrl = "https://api.fund.eastmoney.com/pinzhong/LJSYLZS?fundCode=%s&type=se&indexcode=000300"
