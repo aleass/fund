@@ -88,11 +88,13 @@ func (f *FundData) extract(raw []byte) {
 			continue
 		}
 		var earnings = model.DfFundEarnings{
-			Name:           codeMap[val[0]],
-			LastUpdateTime: now.Unix(),
-			UpdatedAt:      &now,
-			NavPerUnit:     common.Int642Float64(val[3]),
-			Date:           now.Format("2006-01-02"),
+			Name:            codeMap[val[0]],
+			CumulativeNav:   val[4],
+			DailyGrowthRate: common.Int642Float64(val[8]),
+			LastUpdateTime:  now.Unix(),
+			UpdatedAt:       &now,
+			NavPerUnit:      common.Int642Float64(val[3]),
+			Date:            now.Format("2006-01-02"),
 		}
 
 		if id, ok := earningsMap[earnings.Code]; ok {
@@ -103,7 +105,7 @@ func (f *FundData) extract(raw []byte) {
 		}
 		earnings.AddTime = now.Unix()
 		earnings.CreatedAt = &now
-		earnings.DailyGrowthRate = "0"
+		earnings.DailyGrowthRate = 0
 		earnings.CumulativeNav = "0"
 		earnings.Past1Month = "0"
 		earnings.Past1Week = "0"

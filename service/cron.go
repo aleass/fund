@@ -22,8 +22,9 @@ func InitTask() {
 	initFund := func() {
 		println("start")
 		List.GetData()
-		Earnings.GetData()
+		Earnings.GetPurData()
 		Data.GetData()
+		Purchase.GetData()
 	}
 	initFund()
 	println("start task")

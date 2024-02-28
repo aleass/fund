@@ -51,9 +51,9 @@ func (f *FundPurchase) GetData() {
 			continue
 		}
 		distributionDate := check(fund.Code, currdate)
-		earing := purchase.Distribution + fund.NavPerUnit*purchase.HoldingQuantity - purchase.PurchaseAmount
-		msg.WriteString(fmt.Sprintf("\n\n%s \n\t价值:%.2f \n\t盈利:%.2f%s",
-			fund.Name, fund.NavPerUnit*purchase.HoldingQuantity, earing, distributionDate))
+		earing := purchase.HoldingQuantity * fund.NavPerUnit * fund.DailyGrowthRate
+		msg.WriteString(fmt.Sprintf("\n\n%s \n\t盈利:%.2f%s",
+			fund.Name, earing, distributionDate))
 	}
 
 	common.Send(msg.String()[2:], "mine")

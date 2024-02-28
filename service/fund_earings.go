@@ -52,7 +52,7 @@ func (f *FundEarnings) GetData() {
 func (f *FundEarnings) extract(data []byte) {
 	var bufferEarnings []model.DfFundEarnings
 	var updateEarnings []model.DfFundEarnings
-	common.FuncDb.Model(&model.DfFundEarnings{}).Find(&bufferEarnings)
+	common.FuncDb.Model(&model.DfFundEarnings{}).Select("code,id").Find(&bufferEarnings)
 	var earningsMap = make(map[string]int64, len(bufferEarnings))
 	for _, v := range bufferEarnings {
 		earningsMap[v.Code] = v.Id
@@ -82,7 +82,7 @@ func (f *FundEarnings) extract(data []byte) {
 			Date:            string(val[3]),
 			LastUpdateTime:  now.Unix(),
 			UpdatedAt:       &now,
-			DailyGrowthRate: common.DefaultVal(string(val[6])),
+			DailyGrowthRate: common.Int642Float64(string(val[6])),
 			CumulativeNav:   common.DefaultVal(string(val[5])),
 			NavPerUnit:      common.Int642Float64(string(val[4])),
 			Past1Month:      common.DefaultVal(string(val[8])),
@@ -92,9 +92,15 @@ func (f *FundEarnings) extract(data []byte) {
 			Past3Months:     common.DefaultVal(string(val[9])),
 			Past3Years:      common.DefaultVal(string(val[13])),
 			Past6Months:     common.DefaultVal(string(val[10])),
+			Past5Years:      "",
 			SinceInception:  common.DefaultVal(string(val[15])),
 			ThisYear:        common.DefaultVal(string(val[14])),
 		}
+
+		if earnings.Date == "" {
+			earnings.Date = "0001-01-01"
+		}
+
 		//成立日
 		if id, ok := codeMap[earnings.Code]; ok {
 			updateBuff.WriteString(fmt.Sprintf(sql, string(val[16]), nowDate, id))

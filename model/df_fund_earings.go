@@ -7,7 +7,7 @@ type DfFundEarnings struct {
 	Code            string     `gorm:"column:code"              desc:"基金代码"`
 	Date            string     `gorm:"column:date"              desc:"数据的最新日期"`
 	CumulativeNav   string     `gorm:"column:cumulative_nav"    desc:"累计净值"`
-	DailyGrowthRate string     `gorm:"column:daily_growth_rate" desc:"日增长百分率"`
+	DailyGrowthRate float64    `gorm:"column:daily_growth_rate" desc:"日增长百分率"`
 	Name            string     `gorm:"column:name"              desc:"基金简称"`
 	NavPerUnit      float64    `gorm:"column:nav_per_unit"      desc:"单位净值"`
 	Past1Month      string     `gorm:"column:past_1_month"      desc:"近1个月增长率"`

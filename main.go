@@ -11,6 +11,7 @@ import (
 func main() {
 	//初始化配置
 	common.InitConfig()
+
 	//命令启动
 	if len(os.Args) > 1 && os.Args[1] == "help" {
 		var command string
