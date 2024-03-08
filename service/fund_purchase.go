@@ -16,7 +16,7 @@ type FundPurchase struct {
 func (f *FundPurchase) GetData() {
 	common.Logger.Info("执行 购买基金收益查询")
 	var purchases []model.DfFuncPurchase
-	var err = common.FuncDb.Model(&model.DfFuncPurchase{}).Where("purchase_amount > 0 and deleted_at is null").Find(&purchases).Error
+	var err = common.FuncDb.Model(&model.DfFuncPurchase{}).Where("holding_quantity > 0 and deleted_at is null").Find(&purchases).Error
 	if err != nil {
 		log.Println(err.Error())
 		common.Logger.Error(err.Error())
@@ -51,12 +51,18 @@ func (f *FundPurchase) GetData() {
 			continue
 		}
 		distributionDate := check(fund.Code, currdate)
-		earing := purchase.HoldingQuantity * fund.NavPerUnit * fund.DailyGrowthRate
-		msg.WriteString(fmt.Sprintf("\n\n%s \n\t盈利:%.2f%s",
-			fund.Name, earing, distributionDate))
+		earing := purchase.HoldingQuantity * fund.NavPerUnit * fund.DailyGrowthRate / 100
+
+		msg.WriteString(fmt.Sprintf(`
+%s
+日增长率:%.2f%%
+盈利:%.2f
+下一次分红:%s
+`, fund.Name, fund.DailyGrowthRate, earing, distributionDate))
 	}
 
-	common.Send(msg.String()[2:], "mine")
+	//common.Send(msg.String()[2:], "mine")  //0.55
+	log.Print(msg.String()[2:])
 }
 
 // 检查是否有分红

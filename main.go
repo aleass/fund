@@ -16,43 +16,26 @@ func main() {
 	if len(os.Args) > 1 && os.Args[1] == "help" {
 		var command string
 		reader := bufio.NewReader(os.Stdin)
+		println(`请输入:`)
 		for {
-
-			println(`请输入:
-1.阶段收益
-2.净值
-3.已买基金
-4.已买基金阶段收益
-q.退出
-`)
+			for i, v := range service.GetTaskList() {
+				println(i, v.Title)
+			}
 			command, _ = reader.ReadString('\n')
 			//清楚无效字节
 			command = strings.ReplaceAll(command, "\r", "")
 			command = strings.ReplaceAll(command, "\n", "")
 			command = strings.TrimSpace(command)
 
-			//任务启动
-			switch command {
-			case "1": //阶段收益
-				println("执行:1.阶段收益")
-				service.Earnings.GetData()
-
-				println("执行完成:阶段收益")
-			case "2": //净值
-				println("执行:2.净值")
-				service.Data.GetData()
-				println("执行完成:净值")
-			case "3": //已买基金
-				println("执行:3.已买基金")
-				service.Purchase.GetData()
-				println("执行完成:已买基金")
-			case "4": //已买基金阶段收益
-				println("执行:4.已买基金阶段收益")
-				service.Earnings.GetPurData()
-				println("执行完成:已买基金阶段收益")
-			case "q":
-				return
+			//获取任务
+			task := service.GetTaskByIndex(common.Str2Int(command))
+			if task == nil {
+				continue
 			}
+
+			println("执行开始:", command, task.Title)
+			task.Func()
+			println("执行完成:", command, task.Title)
 			println("\r\r")
 		}
 	}

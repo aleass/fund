@@ -19,10 +19,7 @@ var (
 	dataFormat = []byte("datas:[")
 )
 
-type FundData struct {
-}
-
-func (f *FundData) GetData() {
+func (f *FundEarnings) CumulativeNav() {
 	common.Logger.Info("执行 阶段收益任务")
 
 	refer := [][2]string{
@@ -43,12 +40,12 @@ func (f *FundData) GetData() {
 		res = res[index+len(dataFormat)-1:]
 		if index2 := bytes.Index(res, []byte("]]")); index2 != -1 {
 			res = res[:index2+2]
-			f.extract(res)
+			f.cumulativeNavExtract(res)
 		}
 	}
 }
 
-func (f *FundData) extract(raw []byte) {
+func (f *FundEarnings) cumulativeNavExtract(raw []byte) {
 	var bufferEarnings []model.DfFundEarnings
 	var updateEarnings []model.DfFundEarnings
 	var err = common.FuncDb.Model(&model.DfFundEarnings{}).Select("id,code").Find(&bufferEarnings).Error
