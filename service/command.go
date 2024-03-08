@@ -20,6 +20,13 @@ var commandList = []Commons{
 	{"基金阶段收益", Earnings.GetData},
 	{"基金净值", Earnings.CumulativeNav},
 	{"已买基金阶段收益", Earnings.GetPurData},
-	{"发送:已买基金盈利情况", Purchase.GetData},
+	{"已买基金盈利情况", Purchase.GetData},
 	{"更新:基金阶段收益 基金净值 发送:已买基金盈利情况", Earnings.GetPurData},
+	{"拉取数据,发送已买基金盈利情况", GetPurDataEarningsAll},
+}
+
+func GetPurDataEarningsAll() {
+	Earnings.GetData()
+	Earnings.CumulativeNav()
+	Earnings.GetPurData()
 }
