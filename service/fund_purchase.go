@@ -53,16 +53,13 @@ func (f *FundPurchase) GetData() {
 		distributionDate := check(fund.Code, currdate)
 		earing := purchase.HoldingQuantity * fund.NavPerUnit * fund.DailyGrowthRate / 100
 
-		msg.WriteString(fmt.Sprintf(`
-%s
+		msg.WriteString(fmt.Sprintf(`%s
 日增长率:%.2f%%
 盈利:%.2f
-下一次分红:%s
-`, fund.Name, fund.DailyGrowthRate, earing, distributionDate))
+%s`, fund.Name, fund.DailyGrowthRate, earing, distributionDate+"\n"))
 	}
 
-	//common.Send(msg.String()[2:], "mine")  //0.55
-	log.Print(msg.String()[2:])
+	common.Send(msg.String()[:msg.Len()-2], "mine") //0.55
 }
 
 // 检查是否有分红
@@ -101,5 +98,5 @@ func check(code string, currdate string) string {
 		return ""
 	}
 
-	return "\n\t分红:" + date
+	return "下一次分红:\n\t分红:" + date + "\n"
 }
